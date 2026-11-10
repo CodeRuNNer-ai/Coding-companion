@@ -1,0 +1,69 @@
+{
+  "name": "code-buddy",
+  "displayName": "Code Buddy",
+  "description": "A coding companion that watches your editor, notices when you're stuck, and gives you the logic (not just the answer).",
+  "version": "0.1.0",
+  "publisher": "local",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Education", "Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "codeBuddy", "title": "Code Buddy", "icon": "media/icon.svg" }
+      ]
+    },
+    "views": {
+      "codeBuddy": [
+        { "type": "webview", "id": "codeBuddy.chat", "name": "Companion" }
+      ]
+    },
+    "commands": [
+      { "command": "codeBuddy.setApiKey", "title": "Code Buddy: Set Anthropic API Key" },
+      { "command": "codeBuddy.askForHelp", "title": "Code Buddy: I'm Stuck - Help Me" },
+      { "command": "codeBuddy.clearChat", "title": "Code Buddy: Clear Conversation" },
+      { "command": "codeBuddy.togglePause", "title": "Code Buddy: Pause / Resume Watching" }
+    ],
+    "keybindings": [
+      { "command": "codeBuddy.askForHelp", "key": "ctrl+alt+h", "mac": "cmd+alt+h" }
+    ],
+    "configuration": {
+      "title": "Code Buddy",
+      "properties": {
+        "codeBuddy.model": {
+          "type": "string",
+          "default": "claude-sonnet-5-5",
+          "description": "Anthropic model used by the companion."
+        },
+        "codeBuddy.stuckSeconds": {
+          "type": "number",
+          "default": 90,
+          "minimum": 20,
+          "description": "Seconds of inactivity (while the file has problems or an unfinished area) before the companion thinks you're stuck."
+        },
+        "codeBuddy.persistentErrorSeconds": {
+          "type": "number",
+          "default": 60,
+          "minimum": 20,
+          "description": "If the same errors stay for this long while you keep editing, the companion offers help."
+        },
+        "codeBuddy.autoHint": {
+          "type": "boolean",
+          "default": false,
+          "description": "When stuck is detected, automatically generate a gentle nudge instead of only offering one."
+        },
+        "codeBuddy.maxContextLines": {
+          "type": "number",
+          "default": 300,
+          "description": "Max lines of code sent to the model per request (window around your cursor for big files)."
+        },
+        "codeBuddy.ignoreGlobs": {
+          "type": "array",
+          "default": [".env", ".env.*", "*.pem", "*.key", "secrets.*"],
+          "description": "Files whose contents are never sent to the model."
+        }
+      }
+    }
+  }
+}
